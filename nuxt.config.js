@@ -14,8 +14,15 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: "stylesheet",
+        href: "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css",
+      },
+    ],
+    script: [
+      { src: "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" },
+    ],
   }
   },
 
@@ -31,7 +38,7 @@ export default {
   components: true,
 
   buildModules: [
-    ["@nuxtjs/google-fonts", "@nuxtjs/style-resources"],
+    "@nuxtjs/google-fonts", "@nuxtjs/style-resources",
   ],
 
   modules: [
@@ -46,7 +53,7 @@ export default {
   },
   googleFonts: {
     families: {
-      //ชื่อฟ้อน
+      Athiti: [100,200,300,400,500,600,700]
     }
   },
   styleResources: {

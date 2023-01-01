@@ -1,0 +1,40 @@
+@import "../global.scss";
+
+.button{
+    padding:0.8rem 2rem;
+    font-weight: bold;
+    color:rgb(255, 255, 255);
+    background-color: darken($accent-color,10%);
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    &:hover{
+        background-color:darken($accent-color,20%);
+    }
+    &--icon{
+        display:flex;
+        margin:auto;
+        padding:0.3rem 0.7rem;
+        align-items: center;
+        border-radius: 10px;
+        cursor:pointer;
+        background-color:$accent-color;
+        border:none;
+        &:hover{
+            background-color: darken($background-section-color,10%);
+        }
+    }
+    &--store{
+        display:flex;
+        margin:auto;
+        padding:0.8rem 1.5rem;
+        border-radius:5px;
+        background-color: darken($primary-color,5%);
+        cursor:pointer;
+        border:none;
+        color:darken($accent-color ,20%);
+        &:hover{
+            background-color: darken($primary-color,20%);
+        }
+    }
+}
