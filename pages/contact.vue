@@ -1,16 +1,10 @@
 <template>
   <div class="contact-container">
     <!-- header -->
-    <div class="header normal">
-      <newNavbar />
-    </div>
-    <div class="header mobile">
-      <mobile-nav />
-    </div>
-    <!-- main content -->
     <div class="header-page">
       <h2>ช่องทางติดต่อของเรา</h2>
     </div>
+    <!-- main-content -->
     <div class="product-site">
       <div class="header-section">
         <h3>สถานที่ผลิต</h3>
@@ -49,14 +43,13 @@
       </div>
       <form-user />
     </div>
-    <!-- footer -->
-    <div class="footer"></div>
-    <Footer />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  layout: "site",
+};
 </script>
 
 <style lang="scss" scoped>
@@ -65,14 +58,6 @@ export default {};
   height: max-content;
   display: flex;
   flex-direction: column;
-  .header {
-    z-index: 999;
-    transition: top 0.3s;
-    position: fixed;
-    &.mobile {
-      visibility: hidden;
-    }
-  }
   .header-page {
     display: flex;
     width: 100vw;
@@ -144,14 +129,14 @@ export default {};
 }
 @media only screen and (max-width: 768px) {
   .contact-container {
-    .header {
-      &.normal {
-        visibility: hidden;
-      }
-      &.mobile {
-        visibility: visible;
-      }
-    }
+    // .header {
+    //   &.normal {
+    //     visibility: hidden;
+    //   }
+    //   &.mobile {
+    //     visibility: visible;
+    //   }
+    // }
     .product-site {
       .map-api {
         height: 50vh;

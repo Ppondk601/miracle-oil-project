@@ -1,12 +1,5 @@
 <template>
-  <div class="wrapper">
-    <!-- header -->
-    <div class="header normal" id="navbar">
-      <new-navbar />
-    </div>
-    <div class="header mobile">
-      <mobile-nav />
-    </div>
+  <div class="wrapper" id="contain">
     <!-- main-content -->
     <div class="hero-section">
       <heroSection />
@@ -17,19 +10,15 @@
     <div class="ingredient">
       <new-ingredient />
     </div>
-    <!-- footer -->
-    <div class="footer">
-      <Footer />
-    </div>
   </div>
 </template>
 
 <script>
-import { onMounted } from "vue";
 import NewIngredient from "~/components/newIngredient.vue";
 import newNavbar from "~/components/newNavbar.vue";
 
 export default {
+  layout: "site",
   components: { newNavbar, NewIngredient },
 };
 </script>
@@ -40,14 +29,6 @@ export default {
   height: max-content;
   display: flex;
   flex-direction: column;
-  .header {
-    z-index: 999;
-    transition: top 0.3s;
-    position: fixed;
-    &.mobile {
-      visibility: hidden;
-    }
-  }
   .hero-section {
     width: max-content;
     height: max-content;
@@ -58,18 +39,6 @@ export default {
   }
   .ingredient {
     width: max-content;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .wrapper {
-    .header {
-      &.normal {
-        visibility: hidden;
-      }
-      &.mobile {
-        visibility: visible;
-      }
-    }
   }
 }
 </style>

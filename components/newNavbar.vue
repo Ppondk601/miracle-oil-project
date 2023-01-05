@@ -24,7 +24,7 @@
           <p>ติดต่อเรา</p>
         </nuxt-link>
       </div>
-      <div class="dropdown" :class="{ active: active }">
+      <div class="dropdown" :class="{ toggle: toggle }">
         <button class="button--icon" @click="toggleDropdown">
           <p>สั่งซื้อ</p>
           <span><icon>arrow_drop_down</icon></span>
@@ -64,12 +64,12 @@ window.onscroll = function () {
 export default {
   data() {
     return {
-      active: false,
+      toggle: false,
     };
   },
   methods: {
     toggleDropdown() {
-      this.active = !this.active;
+      this.toggle = !this.toggle;
     },
   },
 };
@@ -219,7 +219,7 @@ export default {
       }
     }
 
-    &.active {
+    &.toggle {
       span {
         transition-duration: 0.3s;
         transform: rotate(180deg);

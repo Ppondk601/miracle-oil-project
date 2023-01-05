@@ -62,6 +62,15 @@
 const regEmail =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
 const regTelephone = /^(0[689]{1})+([0-9]{8})+$/;
+import { db } from "~/plugins/firebase/index.js";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  Timestamp,
+  docRef,
+  collection,
+} from "firebase/firestore";
 export default {
   data() {
     return {
@@ -75,6 +84,13 @@ export default {
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       regTelephone: /^(0[689]{1})+([0-9]{8})+$/,
     };
+  },
+  async fetch() {
+    await setDoc(doc(db, "comment", "user"), {
+      name: "poramin",
+      tel: "0950725914",
+      email: "poramink601@gmail.com",
+    });
   },
   computed: {
     checkUsername() {

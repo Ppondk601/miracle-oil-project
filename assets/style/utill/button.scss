@@ -26,15 +26,19 @@
     }
     &--store{
         display:flex;
+        align-items: center;
+        gap:0.7rem;
         margin:auto;
         padding:0.8rem 1.5rem;
         border-radius:5px;
-        background-color: darken($primary-color,5%);
+        background-color: $secondary-color;
+        font-weight: 600;
         cursor:pointer;
         border:none;
-        color:darken($accent-color ,20%);
+        color:orange;
         &:hover{
-            background-color: darken($primary-color,20%);
+            background-color: orange;
+            color:$secondary-color;
         }
     }
 }

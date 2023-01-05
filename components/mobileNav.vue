@@ -23,7 +23,7 @@
         </nuxt-link>
       </div>
       <div class="item-hidden product">
-        <nuxt-link to="/">
+        <nuxt-link to="/store">
           <p>สินค้าของเรา</p>
         </nuxt-link>
       </div>
@@ -35,7 +35,6 @@
       <div class="item-hidden shop">
         <div class="active-hidden" @click="hideLink()">
           <p>สั่งซื้อ</p>
-          <i><font-awesome-icon :icon="['fas', 'angle-down']" /></i>
         </div>
 
         <div class="hidden-in-shop" :class="{ show: show }">
@@ -55,6 +54,12 @@ export default {
       active: false,
       show: false,
     };
+  },
+  watch: {
+    $route() {
+      this.active = false;
+      document.body.style.overflowY = "scroll";
+    },
   },
   methods: {
     onClick() {
@@ -156,8 +161,8 @@ export default {
     transform: translateY(-100%);
     position: fixed;
     &.active {
+      height: 100vh;
       visibility: visible;
-      height: 100%;
       opacity: 1;
       transition-duration: 0.3s;
       transform: translateY(0%);

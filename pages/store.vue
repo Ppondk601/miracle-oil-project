@@ -1,39 +1,39 @@
 <template>
-  <div class="store-container">
-    <!-- header -->
-    <div class="header normal">
-      <newNavbar />
-    </div>
-    <div class="header mobile">
-      <mobile-nav />
-    </div>
-    <!-- main-content -->
+  <div class="store-container" id="contain">
+    <!-- header-section -->
     <div class="header-store"><h1>สินค้าของเรา</h1></div>
+    <!-- main-content -->
     <div class="card">
-      <div v-for="item in product" :key="item" class="image-card">
+      <div v-for="(item, i) in products" :key="i" class="image-card">
         <div class="backdrop"></div>
+        <div class="filter"></div>
         <img :src="item.img" />
-        <div class="title">
-          <h3>{{ item.name }}</h3>
-          <div class="quantity">
-            <p>สินค้าทั้งหมด {{ item.amount }} ชนิด</p>
+        <div class="title-wrapper">
+          <div class="title">
+            <h3>{{ item.name }}</h3>
+            <div class="quantity">
+              <p>สินค้าทั้งหมด {{ item.amount }} ชนิด</p>
+            </div>
+            <button
+              class="button--store animate__animated animate__bounceIn"
+              @click="clickStore"
+            >
+              <icon>shopping_bag</icon>
+              <p>เลือกซื้อ</p>
+            </button>
           </div>
-          <button class="button--store" @click="clickStore">
-            <p>เลือกซื้อ</p>
-          </button>
         </div>
       </div>
     </div>
-    <!-- footer -->
-    <Footer />
   </div>
 </template>
 
 <script>
 export default {
+  layout: "site",
   data() {
     return {
-      product: [
+      products: [
         {
           name: "น้ำมันเหลือง",
           amount: 2,
@@ -87,14 +87,6 @@ export default {
   height: max-content;
   display: flex;
   flex-direction: column;
-  .header {
-    z-index: 999;
-    transition: top 0.3s;
-    position: fixed;
-    &.mobile {
-      visibility: hidden;
-    }
-  }
   .header-store {
     margin-top: 5rem;
     display: flex;
@@ -134,30 +126,48 @@ export default {
         width: 420px;
         position: absolute;
         background-color: rgba(19, 19, 19, 0.5);
+        z-index: 4;
       }
-      .title {
-        display: flex;
-        flex-direction: column;
+      .filter {
         position: absolute;
+        inset: 0;
+        background-color: white;
+        backdrop-filter: saturate(0);
+        opacity: 1;
+        mix-blend-mode: color;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .title-wrapper {
+        position: absolute;
+        inset: 0;
+        display: flex;
         align-items: center;
-        gap: 5px;
-        top: 265px;
-        left: 150px;
-        transition: margin 0.4s ease-in-out;
-        h3 {
-          color: $primary-color;
-          font-weight: 500;
-        }
-        .quantity {
-          opacity: 0;
+        justify-content: center;
+        .title {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          align-items: center;
+          transform: translateY(30px);
+          gap: 0.5rem;
           transition: margin 0.4s ease-in-out;
-          p {
+          z-index: 10;
+          h3 {
             color: $primary-color;
+            font-weight: 500;
           }
-        }
-        button {
-          opacity: 0;
-          transition: margin 0.4s ease-in-out;
+          .quantity {
+            opacity: 0;
+            transition: margin 0.4s ease-in-out;
+            p {
+              color: $primary-color;
+            }
+          }
+          button {
+            display: none;
+            transition: margin 0.4s ease-in-out;
+          }
         }
       }
     }
@@ -172,14 +182,30 @@ export default {
         background-color: rgba(19, 19, 19, 0.2);
         transition: background-color 0.4s;
       }
+      .filter {
+        opacity: 0;
+        backdrop-filter: blur(2px);
+      }
       .title {
-        margin-top: -50px;
+        border-radius: 10px;
+        padding: 20px 16px;
+        background-color: rgba(0, 0, 0, 0.525);
+        transform: translateY(0);
+        transition: transform 0.4s ease-in-out;
+        backdrop-filter: blur(5px);
+        h3 {
+          // text-shadow: 1px 1px 5px $primary-color;
+          color: $primary-color;
+        }
         .quantity {
           opacity: 1;
           transition: opacity 0.4s ease-in-out;
+          p {
+            color: $primary-color;
+          }
         }
         button {
-          opacity: 1;
+          display: flex;
           transition: margin 0.4s ease-in-out;
         }
       }
@@ -188,14 +214,14 @@ export default {
 }
 @media only screen and (max-width: 768px) {
   .store-container {
-    .header {
-      &.normal {
-        visibility: hidden;
-      }
-      &.mobile {
-        visibility: visible;
-      }
-    }
+    // .header {
+    //   &.normal {
+    //     visibility: hidden;
+    //   }
+    //   &.mobile {
+    //     visibility: visible;
+    //   }
+    // }
     .card {
       .image-card {
         width: 300px;

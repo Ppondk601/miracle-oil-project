@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <new-properties />
-  </div>
+  <div><h1>Hello welcome have room have condom</h1></div>
 </template>
 
 <script>
-import newProperties from "~/components/new-properties.vue";
 export default {
-  components: { newProperties },
+  layout: "site",
+  mounted() {
+    alert("hello welcome have room");
+  },
 };
 </script>
 

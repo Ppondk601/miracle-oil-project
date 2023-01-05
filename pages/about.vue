@@ -1,16 +1,5 @@
 <template>
-  <div class="about-container">
-    <!-- header -->
-    <div class="header normal">
-      <newNavbar />
-    </div>
-    <div class="header mobile">
-      <mobile-nav />
-    </div>
-    <!-- min content -->
-    <!-- <div class="section-header">
-      <p>เกี่ยวกับเรา</p>
-    </div> -->
+  <div class="about-container" id="contain">
     <div class="history section-1">
       <div class="image">
         <img
@@ -58,13 +47,13 @@
         </div>
       </div>
     </div>
-    <!-- footer -->
-    <Footer />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  layout: "site",
+};
 </script>
 
 <style lang="scss" scoped>
@@ -73,14 +62,6 @@ export default {};
   height: max-content;
   display: flex;
   flex-direction: column;
-  .header {
-    z-index: 999;
-    transition: top 0.3s;
-    position: fixed;
-    &.mobile {
-      visibility: hidden;
-    }
-  }
 
   .history {
     width: 100vw;
@@ -158,15 +139,16 @@ export default {};
 }
 @media only screen and (max-width: 768px) {
   .about-container {
+    overflow-y: scroll;
     overflow-x: hidden;
-    .header {
-      &.normal {
-        visibility: hidden;
-      }
-      &.mobile {
-        visibility: visible;
-      }
-    }
+    // .header {
+    //   &.normal {
+    //     visibility: hidden;
+    //   }
+    //   &.mobile {
+    //     visibility: visible;
+    //   }
+    // }
     .history {
       position: relative;
       .image {

@@ -33,7 +33,6 @@ export default {
   ],
 
   plugins: [
-    ~plugins/firebase/index
   ],
 
   components: true,
