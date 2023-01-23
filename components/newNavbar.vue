@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-bar" id="navbar">
+  <div class="navigation-bar" id="navbar" ref="nav-bar">
     <div class="logo">
       <h2>MIRACLE OIL</h2>
     </div>
@@ -15,7 +15,7 @@
         </nuxt-link>
       </div>
       <div class="item">
-        <nuxt-link to="/store">
+        <nuxt-link to="/product">
           <p>สินค้าของเรา</p>
         </nuxt-link>
       </div>
@@ -24,6 +24,7 @@
           <p>ติดต่อเรา</p>
         </nuxt-link>
       </div>
+      <!-- dropdown -->
       <div class="dropdown" :class="{ toggle: toggle }">
         <button class="button--icon" @click="toggleDropdown">
           <p>สั่งซื้อ</p>
@@ -36,6 +37,7 @@
               >Facebook</a
             >
           </div>
+          <!-- dropdown - indropdown -->
           <div class="item" id="shopee">
             <icons-shopee />
             <a href="google.com">Shopee</a>
@@ -51,25 +53,31 @@
 </template>
 
 <script>
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function () {
-  var currentScrollPos = window.pageYOffset;
-  if (prevScrollpos > currentScrollPos) {
-    document.getElementById("navbar").style.top = "0";
-  } else {
-    document.getElementById("navbar").style.top = "-5rem";
-  }
-  prevScrollpos = currentScrollPos;
-};
 export default {
+  mounted() {
+    window.addEventListener("scroll", this.navigationOnScrollHidden);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.navigationOnScrollHidden);
+  },
   data() {
     return {
       toggle: false,
+      prevScrollpos: 0,
     };
   },
   methods: {
     toggleDropdown() {
       this.toggle = !this.toggle;
+    },
+    navigationOnScrollHidden() {
+      let currentScrollPos = window.pageYOffset;
+      if (this.prevScrollpos > currentScrollPos) {
+        this.$refs["nav-bar"].style.top = "0"; //this.$ref = document.getElementBy...
+      } else {
+        this.$refs["nav-bar"].style.top = "-5rem";
+      }
+      this.prevScrollpos = currentScrollPos;
     },
   },
 };
