@@ -23,7 +23,7 @@
         </nuxt-link>
       </div>
       <div class="item-hidden product">
-        <nuxt-link to="/store">
+        <nuxt-link to="/product">
           <p>สินค้าของเรา</p>
         </nuxt-link>
       </div>

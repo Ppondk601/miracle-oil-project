@@ -38,7 +38,7 @@ export default {
           name: "น้ำมันเหลือง",
           amount: 2,
           link: "",
-          img: "https://scontent.fbkk28-1.fna.fbcdn.net/v/t39.30808-6/251785899_197893525822136_6015640979506909459_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=730e14&_nc_ohc=NT8TYPB1k7cAX-I_3b0&_nc_pt=1&_nc_ht=scontent.fbkk28-1.fna&oh=00_AfDTTM9E8YzVJQt4XbsS2fJ69ATFk_Q2Vm1nvPuZGkRKzg&oe=63B5FCE9",
+          img: "https://firebasestorage.googleapis.com/v0/b/miracle-oil-store.appspot.com/o/251785899_197893525822136_6015640979506909459_n.jpg?alt=media&token=81e302cc-d09b-49ba-9de9-4b846a57e8e3",
         },
         {
           name: "สบู่โมจิ",

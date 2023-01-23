@@ -16,7 +16,7 @@
             <p>{{ item.textLogo }}</p>
             <div class="more-button">
               <button class="button">
-                <nuxt-link to="/store">
+                <nuxt-link to="/product">
                   <a>ดูเพิ่มเติม</a>
                 </nuxt-link>
               </button>

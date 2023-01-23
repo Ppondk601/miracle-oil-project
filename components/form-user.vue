@@ -2,7 +2,7 @@
   <div class="form-contact">
     <div class="header-form"></div>
 
-    <form @submit.prevent="sendMessage">
+    <form @submit.prevent="submitComment">
       <h4>ชื่อจริง</h4>
       <input
         type="text"
@@ -53,7 +53,9 @@
         required
       ></textarea>
 
-      <button type="submit" class="button">ส่งความคิดเห็น</button>
+      <button type="submit" class="button" @click="submitComment">
+        ส่งความคิดเห็น
+      </button>
     </form>
   </div>
 </template>
@@ -71,6 +73,7 @@ import {
   docRef,
   collection,
 } from "firebase/firestore";
+import { uuidv4 } from "@firebase/util";
 export default {
   data() {
     return {
@@ -80,6 +83,7 @@ export default {
       interesting: "",
       comment: "",
       userInput: [],
+      getComment: [],
       regEmail:
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       regTelephone: /^(0[689]{1})+([0-9]{8})+$/,
@@ -87,10 +91,11 @@ export default {
   },
   async fetch() {
     await setDoc(doc(db, "comment", "user"), {
-      name: "poramin",
+      name: "poramon",
       tel: "0950725914",
       email: "poramink601@gmail.com",
     });
+    console.log(db);
   },
   computed: {
     checkUsername() {
@@ -145,24 +150,32 @@ export default {
     },
   },
   methods: {
-    sendMessage() {
-      if (this.checkUsername && this.checkEmail === "pass") {
-        this.userInput.push({
+    async submitComment() {
+      if (
+        this.checkUsername &&
+        this.checkEmail &&
+        this.checkTel &&
+        this.checkInterest &&
+        this.checkComment === "pass"
+      ) {
+        const userRef = doc(db, "messageFromUser", uuidv4());
+        await setDoc(userRef, {
+          id: uuidv4(),
           userName: this.username,
           userEmail: this.email,
           userNumber: this.phoneNumber,
           userInterest: this.interesting,
           userComment: this.comment,
+          currentTime: Timestamp.now(),
+          active: false,
         });
-        this.username = "";
-        this.email = "";
-        this.phoneNumber = "";
-        this.interesting = "";
-        this.comment = "";
+        (this.username = ""),
+          (this.email = ""),
+          (this.phoneNumber = ""),
+          (this.interesting = ""),
+          (this.comment = "");
       } else {
-        console.log(this.checkUsername);
-        console.log(this.checkEmail);
-        alert("โปรดกรอกข้อมูลให้ครบ");
+        alert("กรุณากรอกข้อมูลให้ครบ");
       }
     },
     isNumber(evt) {
