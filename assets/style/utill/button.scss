@@ -11,6 +11,16 @@
     &:hover{
         background-color:darken($accent-color,20%);
     }
+    &--admin{
+        display:flex;
+        margin:auto;
+        background-color:darken($primary-color,30%);
+        border-radius: 10px;
+        cursor:pointer;
+        &:hover{
+            background-color: darken($primary-color,20%);
+        }
+    }
     &--icon{
         display:flex;
         margin:auto;

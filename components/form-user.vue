@@ -3,8 +3,10 @@
     <div class="header-form"></div>
 
     <form @submit.prevent="submitComment">
+      <!-- input ใส่ name:username -->
       <h4>ชื่อจริง</h4>
       <input
+        name="inputName"
         type="text"
         placeholder=" กรุณาใส่ชื่อของคุณ"
         class="name"
@@ -15,6 +17,7 @@
       <h4>อีเมลล์</h4>
 
       <input
+        name="inputEmail"
         type="text"
         placeholder=" ใส่อีเมลล์ของคุณ เช่น '-miracle-oil@gmail.com' "
         class="email"
@@ -24,6 +27,7 @@
       />
       <h4>เบอร์โทรศัพท์</h4>
       <input
+        name="inputTel"
         type="text"
         @keypress="isNumber($event)"
         placeholder=" ใส่เบอร์โทรศัพท์ที่ติดต่อได้ของคุณ เช่น '081-xxx-xxxx' "
@@ -35,6 +39,7 @@
       />
       <h4>ติดต่อในเรื่องใด</h4>
       <input
+        name="inputInterest"
         type="text"
         placeholder=" สนใจในด้านใด เช่น 'สนใจเป็นตัวแทนจำหน่าย' "
         :class="checkInterest"
@@ -53,9 +58,7 @@
         required
       ></textarea>
 
-      <button type="submit" class="button" @click="submitComment">
-        ส่งความคิดเห็น
-      </button>
+      <button type="submit" class="button">ส่งความคิดเห็น</button>
     </form>
   </div>
 </template>
@@ -88,14 +91,6 @@ export default {
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       regTelephone: /^(0[689]{1})+([0-9]{8})+$/,
     };
-  },
-  async fetch() {
-    await setDoc(doc(db, "comment", "user"), {
-      name: "poramon",
-      tel: "0950725914",
-      email: "poramink601@gmail.com",
-    });
-    console.log(db);
   },
   computed: {
     checkUsername() {
@@ -158,9 +153,10 @@ export default {
         this.checkInterest &&
         this.checkComment === "pass"
       ) {
-        const userRef = doc(db, "messageFromUser", uuidv4());
+        const docId = uuidv4();
+        const userRef = doc(db, "messageFromUser", docId);
         await setDoc(userRef, {
-          id: uuidv4(),
+          id: docId,
           userName: this.username,
           userEmail: this.email,
           userNumber: this.phoneNumber,
@@ -180,7 +176,7 @@ export default {
     },
     isNumber(evt) {
       evt = evt ? evt : window.event;
-      var charCode = evt.which ? evt.which : evt.keyCode;
+      let charCode = evt.which ? evt.which : evt.keyCode;
       if (
         charCode > 31 &&
         (charCode < 48 || charCode > 57) &&

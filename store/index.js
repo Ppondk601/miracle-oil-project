@@ -10,27 +10,27 @@ import {
 } from "firebase/firestore";
 import { uuidv4 } from "@firebase/util";
 export const state = () => ({
-  counter: 0,
   comments: [],
   pokemons: [],
+  selectedId:"",
 });
 export const mutations = {
-  increment(state) {
-    state.counter++;
-  },
-  decrement(state) {
-    state.counter--;
-  },
   pushComment(state,comment) {
     state.comments.push(comment)
   },
   setPokemon(state,pokemons){
     state.pokemons = pokemons
+  },
+  clickId(state,payload){
+    state.selectedId = payload
+  },
+  removeComments(state,ids){
+    state.comments =state.comments.filter(comment => !ids.includes(comment.id))
   }
 };
 export const actions = {
   async fetch(store) {
-    const querySnapshot = await getDocs(collection(db, "message"));
+    const querySnapshot = await getDocs(collection(db, "messageFromUser"));
     querySnapshot.forEach((doc) => {
       store.commit("pushComment",doc.data());
     });
@@ -39,10 +39,16 @@ export const actions = {
   async fetchPoke(store) {
     const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
     const {results,count} = await pokemonsDeck.json()
-    console.log(count)
     store.commit("setPokemon",results)
   }
 };
-exports.action = {
-  
+export const getters = {
+  checkId(state) {
+    return selectedId => {
+      return state.comments.find(comment => comment.id === selectedId)
+    }
+  },
+  sizeOfComment(state) {
+    return state.comments.length
+  }
 }
