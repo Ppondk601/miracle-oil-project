@@ -1,6 +1,12 @@
 <template>
   <div class="form-contact">
     <div class="header-form"></div>
+    <modal ref="modal-form-true">
+      <div class="text-box-true">
+        <icon>check_circle</icon>
+        <h2>ส่งข้อความเรียบร้อยแล้ว</h2>
+      </div>
+    </modal>
 
     <form @submit.prevent="submitComment">
       <!-- input ใส่ name:username -->
@@ -170,6 +176,7 @@ export default {
           (this.phoneNumber = ""),
           (this.interesting = ""),
           (this.comment = "");
+        this.$refs["modal-form-true"].$el.classList.add("active");
       } else {
         alert("กรุณากรอกข้อมูลให้ครบ");
       }
@@ -191,6 +198,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.form-contact {
+  .modal {
+    .text-box-true {
+      flex-direction: column;
+      background-color: #fff;
+      width: 100rem;
+      height: 50rem;
+    }
+  }
+}
 form {
   display: flex;
   flex-direction: column;

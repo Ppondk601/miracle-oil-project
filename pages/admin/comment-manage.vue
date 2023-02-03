@@ -270,7 +270,7 @@ export default {
             height: 2.5rem;
             justify-content: center;
             border-radius: 5px;
-            background-color: rgb(234, 77, 77);
+            background-color: $delete-color;
             border: none;
             cursor: pointer;
             &:disabled {
@@ -278,7 +278,7 @@ export default {
               pointer-events: none;
             }
             &:hover {
-              background-color: darken(rgb(234, 77, 77), 20%);
+              background-color: darken($delete-color, 20%);
             }
             p {
               color: white;

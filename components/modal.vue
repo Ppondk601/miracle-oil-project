@@ -20,12 +20,12 @@ export default {};
   width: 100vw;
   height: 100vh;
   background-color: lighten($secondary-color, 5%);
-  opacity: 0.8;
+  opacity: 0;
   position: fixed;
   justify-content: center;
   align-items: center;
-  display: none;
   z-index: 999;
+  pointer-events: none;
   button.close {
     position: fixed;
     top: 0;
@@ -40,7 +40,9 @@ export default {};
     display: flex;
   }
   &.active {
+    opacity: 0.8;
     display: flex;
+    pointer-events: all;
   }
 }
 </style>

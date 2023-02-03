@@ -11,16 +11,16 @@ import {
 import { uuidv4 } from "@firebase/util";
 export const state = () => ({
   comments: [],
-  pokemons: [],
+  // pokemons: [],
   selectedId:"",
 });
 export const mutations = {
   pushComment(state,comment) {
     state.comments.push(comment)
   },
-  setPokemon(state,pokemons){
-    state.pokemons = pokemons
-  },
+  // setPokemon(state,pokemons){
+  //   state.pokemons = pokemons
+  // },
   clickId(state,payload){
     state.selectedId = payload
   },
@@ -29,6 +29,7 @@ export const mutations = {
   }
 };
 export const actions = {
+  // get-comment
   async fetch(store) {
     const querySnapshot = await getDocs(collection(db, "messageFromUser"));
     querySnapshot.forEach((doc) => {
@@ -36,13 +37,16 @@ export const actions = {
     });
     console.log(querySnapshot)
   },
-  async fetchPoke(store) {
-    const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
-    const {results,count} = await pokemonsDeck.json()
-    store.commit("setPokemon",results)
-  }
+  // ---------------------------------------------------------------------------------
+
+  // async fetchPoke(store) {
+  //   const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
+  //   const {results,count} = await pokemonsDeck.json()
+  //   store.commit("setPokemon",results)
+  // }
 };
 export const getters = {
+  // comment-manage
   checkId(state) {
     return selectedId => {
       return state.comments.find(comment => comment.id === selectedId)
@@ -51,4 +55,5 @@ export const getters = {
   sizeOfComment(state) {
     return state.comments.length
   }
+  // -------------------------------------------------------------------------------------
 }
