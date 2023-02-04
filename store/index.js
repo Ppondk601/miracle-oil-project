@@ -13,6 +13,7 @@ export const state = () => ({
   comments: [],
   // pokemons: [],
   selectedId:"",
+  products:[],
 });
 export const mutations = {
   pushComment(state,comment) {
@@ -26,8 +27,14 @@ export const mutations = {
   },
   removeComments(state,ids){
     state.comments =state.comments.filter(comment => !ids.includes(comment.id))
+  },
+  // store-manage
+  pushProduct(state,product){
+    state.products.push(product)
   }
 };
+
+
 export const actions = {
   // get-comment
   async fetch(store) {
@@ -38,7 +45,14 @@ export const actions = {
     console.log(querySnapshot)
   },
   // ---------------------------------------------------------------------------------
-
+  // get-product
+  async fetchProduct(store){
+    const snap = await getDocs(collection(db,"products"));
+    snap.forEach((doc) => {
+      store.commit("pushProduct",doc.data());
+    });
+    console.log(snap)
+  }
   // async fetchPoke(store) {
   //   const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
   //   const {results,count} = await pokemonsDeck.json()
