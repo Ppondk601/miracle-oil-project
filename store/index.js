@@ -12,47 +12,48 @@ import { uuidv4 } from "@firebase/util";
 export const state = () => ({
   comments: [],
   // pokemons: [],
-  selectedId:"",
-  products:[],
+  selectedId: "",
+  products: [],
 });
 export const mutations = {
-  pushComment(state,comment) {
-    state.comments.push(comment)
+  pushComment(state, comment) {
+    state.comments.push(comment);
   },
   // setPokemon(state,pokemons){
   //   state.pokemons = pokemons
   // },
-  clickId(state,payload){
-    state.selectedId = payload
+  clickId(state, payload) {
+    state.selectedId = payload;
   },
-  removeComments(state,ids){
-    state.comments =state.comments.filter(comment => !ids.includes(comment.id))
+  removeComments(state, ids) {
+    state.comments = state.comments.filter(
+      (comment) => !ids.includes(comment.id)
+    );
   },
   // store-manage
-  pushProduct(state,product){
-    state.products.push(product)
-  }
+  pushProduct(state, product) {
+    state.products.push(product);
+  },
 };
-
 
 export const actions = {
   // get-comment
   async fetch(store) {
     const querySnapshot = await getDocs(collection(db, "messageFromUser"));
     querySnapshot.forEach((doc) => {
-      store.commit("pushComment",doc.data());
+      store.commit("pushComment", doc.data());
     });
-    console.log(querySnapshot)
+    console.log(querySnapshot);
   },
   // ---------------------------------------------------------------------------------
   // get-product
-  async fetchProduct(store){
-    const snap = await getDocs(collection(db,"products"));
+  async fetchProduct(store) {
+    const snap = await getDocs(collection(db, "products"));
     snap.forEach((doc) => {
-      store.commit("pushProduct",doc.data());
+      store.commit("pushProduct", doc.data());
     });
-    console.log(snap)
-  }
+    console.log(snap);
+  },
   // async fetchPoke(store) {
   //   const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
   //   const {results,count} = await pokemonsDeck.json()
@@ -62,12 +63,12 @@ export const actions = {
 export const getters = {
   // comment-manage
   checkId(state) {
-    return selectedId => {
-      return state.comments.find(comment => comment.id === selectedId)
-    }
+    return (selectedId) => {
+      return state.comments.find((comment) => comment.id === selectedId);
+    };
   },
   sizeOfComment(state) {
-    return state.comments.length
-  }
+    return state.comments.length;
+  },
   // -------------------------------------------------------------------------------------
-}
+};

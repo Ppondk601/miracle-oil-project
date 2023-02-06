@@ -23,7 +23,7 @@
           <p>demo</p>
         </div>
         <div class="product-name">
-          <p>{{ product.productName }}</p>
+          <p>{{ product.name }}</p>
         </div>
         <button class="button">แก้ไขสินค้า</button>
       </div>
@@ -37,19 +37,28 @@
         <div class="title name">
           <p>ชื่อสินค้า</p>
         </div>
-        <input name="ชื่อสินค้า" type="text" v-model="productNameInput" />
+        <input name="productName" type="text" />
       </div>
       <div class="input url">
         <div class="title url">
           <p>ลิงก์ของร้านค้า</p>
         </div>
-        <input name="url" type="text" v-model="productUrlInput" />
+        <input name="url" type="text" />
       </div>
       <div class="input-piture">
         <div class="title picture">
           <p>อัพโหลดรูปภาพ</p>
         </div>
-        <input name="picture" type="file" />
+        <input
+          name="picture"
+          type="file"
+          accept="image/jpeg,image/png,image/gif"
+          @change="objectToUrl"
+        />
+        <div class="preview">
+          <img :src="previewUrl" width="100px" />
+          {{ previewUrl }}
+        </div>
       </div>
       <div class="decide-button">
         <button class="button--confirm" type="submit">
@@ -65,22 +74,15 @@
 </template>
 
 <script>
-import { db } from "~/plugins/firebase/index.js";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  Timestamp,
-  docRef,
-  collection,
-} from "firebase/firestore";
+import { db, storage } from "~/plugins/firebase/index.js";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { uuidv4 } from "@firebase/util";
+import { uploadBytes, ref, getDownloadURL } from "@firebase/storage";
 export default {
   data() {
     return {
       newProducts: [],
-      productNameInput: "",
-      productUrlInput: "",
+      previewUrl: "",
     };
   },
   async fetch() {
@@ -91,15 +93,47 @@ export default {
     }
   },
   methods: {
-    async addNewProduct() {
-      const productId = uuidv4();
-      const productRef = doc(db, "products", productId);
-      await setDoc(productRef, {
-        id: productId,
-        productName: this.productNameInput,
-        productUrl: this.productUrlInput,
-        addTime: Timestamp.now(),
-      });
+    async addNewProduct(e) {
+      let fd = new FormData(e.target);
+      // console.log(fd.get("picture"));
+      if (fd.get("picture").size > 100_500_000) {
+        alert("ใหญ่เบิ้ม");
+        return;
+      }
+      console.log(storage);
+      try {
+        const productId = uuidv4();
+        const storageRef = ref(
+          storage,
+          `/products/${fd.get("productName")}_${productId}.jpeg`
+        );
+        let uploadResult = await uploadBytes(storageRef, fd.get("picture"));
+        let downloadUrl = await getDownloadURL(uploadResult.ref);
+        const productRef = doc(db, "products", productId);
+        await setDoc(productRef, {
+          id: productId,
+          name: fd.get("productName"),
+          url: fd.get("url"),
+          image: {
+            path: `/products/${fd.get("productName")}_${productId}.jpeg`,
+            url: downloadUrl,
+          },
+          createdAt: Timestamp.now(),
+          // createdBy: this.$store.state.user.name || "system",
+          // updatedAt: Timestamp.now(),
+          // updatedBy: this.$store.state.user.name || "system",
+        });
+        // this.previewUrl = "";
+        e.target.reset();
+        this.previewUrl = "";
+        alert("Upload Complete");
+      } catch (error) {
+        alert("error");
+        console.log(error);
+      }
+    },
+    objectToUrl(e) {
+      this.previewUrl = URL.createObjectURL(e.target.files[0]);
     },
   },
 };
