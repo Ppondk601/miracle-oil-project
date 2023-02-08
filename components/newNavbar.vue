@@ -218,7 +218,6 @@ export default {
         color: $primary-color;
         width: max-content;
       }
-
       span {
         transform: rotate(0deg);
         transition-duration: 0.3s;

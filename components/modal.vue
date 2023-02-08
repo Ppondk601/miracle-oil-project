@@ -17,9 +17,8 @@ export default {};
 <style lang="scss" scoped>
 .modal {
   display: flex;
-  width: 100vw;
-  height: 100vh;
-  background-color: lighten($secondary-color, 5%);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
   opacity: 0;
   position: fixed;
   justify-content: center;
@@ -40,7 +39,7 @@ export default {};
     display: flex;
   }
   &.active {
-    opacity: 0.8;
+    opacity: 1;
     display: flex;
     pointer-events: all;
   }

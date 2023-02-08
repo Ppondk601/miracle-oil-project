@@ -12,6 +12,6 @@ export default {};
 
 <style lang="scss" scoped>
 .material-icons-round {
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 </style>
