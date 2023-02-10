@@ -6,7 +6,9 @@
     >
       <icon>close</icon>
     </button>
-    <slot> </slot>
+    <div class="modal-content">
+      <slot> </slot>
+    </div>
   </div>
 </template>
 
@@ -25,6 +27,9 @@ export default {};
   align-items: center;
   z-index: 999;
   pointer-events: none;
+  .modal-content {
+    max-height: 80vh;
+  }
   button.close {
     position: fixed;
     top: 0;

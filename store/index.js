@@ -14,6 +14,7 @@ export const state = () => ({
   // pokemons: [],
   selectedId: "",
   products: [],
+  modalToggleId: "",
 });
 export const mutations = {
   pushComment(state, comment) {
@@ -34,6 +35,15 @@ export const mutations = {
   pushProduct(state, product) {
     state.products.push(product);
   },
+  clickedId(state, payload) {
+    state.modalToggleId = payload;
+  },
+  removeProduct(state, id) {
+    state.products.splice(
+      state.products.findIndex((product) => product.id === id),
+      1
+    );
+  },
 };
 
 export const actions = {
@@ -43,16 +53,19 @@ export const actions = {
     querySnapshot.forEach((doc) => {
       store.commit("pushComment", doc.data());
     });
-    console.log(querySnapshot);
+    // console.log(querySnapshot);
   },
   // ---------------------------------------------------------------------------------
   // get-product
   async fetchProduct(store) {
     const snap = await getDocs(collection(db, "products"));
+    let items = [];
     snap.forEach((doc) => {
       store.commit("pushProduct", doc.data());
+      items.push(doc.data());
     });
-    console.log(snap);
+    return items;
+    // console.log(snap);
   },
   // async fetchPoke(store) {
   //   const pokemonsDeck = await fetch("https://pokeapi.co/api/v2/pokemon");
@@ -71,4 +84,10 @@ export const getters = {
     return state.comments.length;
   },
   // -------------------------------------------------------------------------------------
+  // product-manage
+  // detectedId(state) {
+  //   return (modalToggleId) => {
+  //     return state.products.find((product) => product.id === modalToggleId);
+  //   };
+  // },
 };

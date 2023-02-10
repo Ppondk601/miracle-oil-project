@@ -25,8 +25,8 @@
           <div class="name">
             <p>{{ product.name }}</p>
           </div>
-          <button class="button--icon">
-            <icon>settings</icon>
+          <button class="button--icon" @click="toggleUpdateData(product.id)">
+            <icon>edit</icon>
             แก้ไขข้อมูล
           </button>
         </div>
@@ -79,24 +79,74 @@
         </div>
       </form>
     </modal>
+    <!-- modal-update-data -->
+    <div v-if="$fetchState.pending">"LOADING"</div>
+    <modal ref="modal-update-data">
+      <form v-if="productTemp.edit">
+        <div class="form update-data">
+          <div class="header-form">
+            <h2>ข้อมูลสินค้าปัจจุบัน</h2>
+          </div>
+          <div class="current-image">
+            <div class="text-title">
+              <h4>รูปปัจจุบัน</h4>
+            </div>
+            <img src="" />
+            <div class="text-title"><p>อัพโหลดรูปภาพใหม่</p></div>
+            <input type="file" name="update-image" />
+          </div>
+          <div class="current-name">
+            <div class="text-title">
+              <h4>แก้ไขชื่อสินค้า</h4>
+              <input type="text" name="name" v-model="productTemp.edit.name" />
+            </div>
+          </div>
+          <div class="current-url">
+            <div class="text-title">
+              <h4>แก้ไขลิงก์ร้านค้า</h4>
+            </div>
+            <input type="url" name="url" v-model="productTemp.edit.url" />
+          </div>
+          <div class="confirm-cancle">
+            <button class="button--confirm">ยืนยันการแก้ไข</button>
+            <button class="button--delete">ยกเลิก</button>
+          </div>
+        </div>
+        <div class="delete-product">
+          <button class="button--delete" @click.prevent="removeProduct">
+            ลบสินค้าออกจากคลัง
+          </button>
+        </div>
+      </form>
+    </modal>
   </div>
 </template>
 
 <script>
 import { db, storage } from "~/plugins/firebase/index.js";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { deleteDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { uuidv4 } from "@firebase/util";
-import { uploadBytes, ref, getDownloadURL } from "@firebase/storage";
+import {
+  uploadBytes,
+  ref,
+  getDownloadURL,
+  deleteObject,
+} from "@firebase/storage";
 
 export default {
   data() {
     return {
       previewUrl: "",
+      productId: "",
+      productTemp: {
+        edit: undefined,
+        backup: null,
+      },
     };
   },
   async fetch() {
     try {
-      this.$store.dispatch("fetchProduct");
+      await this.$store.dispatch("fetchProduct");
     } catch (error) {
       alert("error");
     }
@@ -105,6 +155,20 @@ export default {
     toggleModal() {
       this.$refs["modal-add-product"].$el.classList.add("active");
     },
+    toggleUpdateData(id) {
+      // this.productId = id;
+      // this.$store.commit("clickedId", id);
+      this.productTemp.edit = JSON.parse(
+        JSON.stringify(this.$store.state.products.find((el) => el.id === id))
+      );
+      console.log("Edit", this.productTemp.edit);
+      this.productTemp.backup = JSON.parse(
+        JSON.stringify(this.$store.state.products.find((el) => el.id === id))
+      );
+      console.log("Backup", this.productTemp.backup);
+      this.$refs["modal-update-data"].$el.classList.add("active");
+    },
+
     async confirmAdd(e) {
       let fd = new FormData(e.target);
       if (fd.get("image").size > 500_000) {
@@ -118,7 +182,7 @@ export default {
         let uploadResult = await uploadBytes(storageRef, fd.get("image"));
         let downloadUrl = await getDownloadURL(uploadResult.ref);
         const productRef = doc(db, "products", productId);
-        await setDoc(productRef, {
+        let uploadingData = {
           id: productId,
           name: fd.get("name"),
           url: fd.get("url"),
@@ -127,7 +191,9 @@ export default {
             url: downloadUrl,
           },
           createAt: Timestamp.now(),
-        });
+        };
+        await setDoc(productRef, uploadingData);
+        this.$store.commit("pushProduct", uploadingData);
         e.target.reset();
         this.previewUrl = "";
       } catch (error) {
@@ -136,6 +202,19 @@ export default {
     },
     objectToUrl(e) {
       this.previewUrl = URL.createObjectURL(e.target.files[0]);
+    },
+    async removeProduct() {
+      try {
+        console.log(this.productTemp.edit.id);
+        await deleteDoc(doc(db, "products", this.productTemp.edit.id));
+        await deleteObject(ref(storage, this.productTemp.edit.image.path));
+        this.$store.commit("removeProduct", this.productTemp.edit.id);
+        this.$refs["modal-update-data"].$el.classList.remove("active");
+        alert("ลบสำเรด");
+      } catch (error) {
+        alert("error");
+        console.log(error);
+      }
     },
   },
 };
@@ -231,9 +310,10 @@ export default {
       margin: 1rem;
       justify-content: space-between;
       width: 90%;
+
       .title {
         background-color: #fad03af1;
-        width: 30%;
+        width: 10rem;
         height: 3rem;
         align-items: center;
         display: flex;
