@@ -33,6 +33,7 @@ export default {
   ],
 
   plugins: [
+    '@/plugins/firebase'
   ],
 
   components: true,

@@ -56,7 +56,7 @@ export default {};
 
 <style lang="scss" scoped>
 .footer {
-  display: grid;
+  display: grid; 
   grid-template-columns: 30% 40% 30%;
   height: 100%;
   width: 100vw;

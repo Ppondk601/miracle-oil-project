@@ -92,6 +92,11 @@ export default {
       alert("error");
     }
   },
+  middleware(context){
+            if(context.store.state.user.id == ''){
+                context.redirect("/admin/login");
+            }
+        },
   methods: {
     async addNewProduct(e) {
       let fd = new FormData(e.target);

@@ -15,6 +15,8 @@ export const state = () => ({
   selectedId: "",
   products: [],
   modalToggleId: "",
+  // auth
+  users: [],
 });
 export const mutations = {
   pushComment(state, comment) {
@@ -31,6 +33,9 @@ export const mutations = {
       (comment) => !ids.includes(comment.id)
     );
   },
+  // setUser(state, user) {
+  //   state.users.push(user);
+  // },
   // store-manage
   pushProduct(state, product) {
     state.products.push(product);

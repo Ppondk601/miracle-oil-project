@@ -1,13 +1,15 @@
 <template>
   <div class="product-manage-container">
-    <sidebar />
+    <div class="sidebar">
+      <sidebar />
+    </div>
     <div class="main-content">
       <div class="header">
         <div class="title">
           <h4>สินค้าภายในร้าน</h4>
         </div>
         <div class="add function">
-          <button class="button--delete" @click="toggleModal">
+          <button class="button--delete" @click="toggleModal" style="opacity:0">
             <icon>add_circle</icon>
             เพิ่มสินค้า
           </button>
@@ -22,13 +24,16 @@
           <div class="picture">
             <img :src="product.image.url" width="150px" />
           </div>
-          <div class="name">
-            <p>{{ product.name }}</p>
+          <div class="create-time">
+            <p>สร้างเมื่อ : วันที่ {{  convertTimestamp(product.createAt) }}</p>
           </div>
-          <button class="button--icon" @click="toggleUpdateData(product.id)">
+          <div class="name">
+            <h4>{{ product.name }}</h4>
+          </div>
+          <div class="edit-product" @click="toggleUpdateData(product.id)">
             <icon>edit</icon>
-            แก้ไขข้อมูล
-          </button>
+            <p>แก้ไขข้อมูล</p>
+          </div>
         </div>
       </div>
     </div>
@@ -71,7 +76,10 @@
             <button class="button--confirm">ยืนยัน</button>
             <button
               class="button--delete"
-              @click="$refs['modal-add-product'].$el.classList.remove('active')"
+              @click.prevent="
+                $refs['modal-add-product'].$el.classList.remove('active')
+              "
+              บัค
             >
               ยกเลิก
             </button>
@@ -86,14 +94,6 @@
         <div class="form update-data">
           <div class="header-form">
             <h2>ข้อมูลสินค้าปัจจุบัน</h2>
-          </div>
-          <div class="current-image">
-            <div class="text-title">
-              <h4>รูปปัจจุบัน</h4>
-            </div>
-            <img src="" />
-            <div class="text-title"><p>อัพโหลดรูปภาพใหม่</p></div>
-            <input type="file" name="update-image" />
           </div>
           <div class="current-name">
             <div class="text-title">
@@ -151,9 +151,22 @@ export default {
       alert("error");
     }
   },
+  middleware(context) {
+    if (context.store.state.user.id == "") {
+      context.redirect("/admin/login");
+    }
+  },
   methods: {
     toggleModal() {
       this.$refs["modal-add-product"].$el.classList.add("active");
+    },
+    convertTimestamp(timestamp) {
+      console.log(timestamp)
+      const date =  new Date(timestamp.seconds * 1000)
+      return date.toLocaleString('th-th', {
+      timeStyle: 'short',
+      dateStyle: 'medium',
+    }) 
     },
     toggleUpdateData(id) {
       // this.productId = id;
@@ -192,6 +205,7 @@ export default {
           },
           createAt: Timestamp.now(),
         };
+
         await setDoc(productRef, uploadingData);
         this.$store.commit("pushProduct", uploadingData);
         e.target.reset();
@@ -210,7 +224,7 @@ export default {
         await deleteObject(ref(storage, this.productTemp.edit.image.path));
         this.$store.commit("removeProduct", this.productTemp.edit.id);
         this.$refs["modal-update-data"].$el.classList.remove("active");
-        alert("ลบสำเรด");
+        alert("ลบสำเร็จ");
       } catch (error) {
         alert("error");
         console.log(error);
@@ -224,11 +238,41 @@ export default {
 .product-manage-container {
   display: flex;
   flex-direction: row;
-  width: max-content;
-  height: max-content;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   align-items: center;
   overflow-y: hidden;
+  background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  .modal {
+    form {
+      display: flex;
+      .form {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        margin: 0;
+        .header-form {
+          padding: 1rem;
+          border-radius: 10px;
+          background-color: #ab57f9d1;
+          h2 {
+            color: white;
+          }
+        }
+        .box-input {
+          .item-input {
+            .input-title {
+              background-color: #64aef9;
+              p {
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   form {
     border: 1px solid white;
     background-color: #fff;
@@ -297,21 +341,27 @@ export default {
   .main-content {
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    width: max-content;
-    height: max-content;
+    width: 72vw;
+    height: 95vh;
     align-items: center;
     margin-left: 2rem;
-
+    background: rgba(255, 255, 255, 0.825);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
     .header {
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin: 1rem;
       justify-content: space-between;
-      width: 90%;
-
+      width: 100%;
+      border-radius: 10px 10px 0px 0px;
+      background-color: #ab57f9d1;
+      padding: 1rem;
+      margin-bottom: 2rem;
       .title {
+        margin-left: 5rem;
         background-color: #fad03af1;
         width: 10rem;
         height: 3rem;
@@ -325,25 +375,74 @@ export default {
           text-shadow: 1px 1px 2px black;
         }
       }
+      .add {
+        margin-right: 5rem;
+        button {
+          display: flex;
+          padding: 0.5rem 2rem;
+          gap: 0.5rem;
+        }
+      }
     }
     .card-box {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: auto;
-      margin: 1rem;
-
+      grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+      gap: 1rem;
+      width: 90%;
+      align-items: center;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 0.5rem;
       .card {
         display: flex;
         flex-direction: column;
-        width: 15vw;
-        border: 1px solid red;
-        height: 35vh;
-        padding: 1rem;
-        justify-content: center;
+        width: 320px;
+        height: 400px;
         align-items: center;
-        border-radius: 5px;
+        justify-content: space-between;
+        border-radius: 10px;
+        box-shadow: 1px 1px 10px rgba(45, 45, 45, 0.399);
         gap: 1rem;
-        margin: 1rem;
+        .picture {
+          display: flex;
+          width: 100%;
+          height: 220px;
+          justify-content: center;
+
+          img {
+            width: 100%;
+            border-radius: 10px 10px 0px 0px;
+            object-fit: cover;
+          }
+        }
+        .create-time {
+          p {
+            color: #eb0565;
+          }
+        }
+        .name {
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          h4 {
+            font-weight: 600;
+          }
+        }
+        .edit-product {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          justify-content: center;
+          border-radius: 0px 0px 10px 10px;
+          align-items: center;
+          height: 50px;
+          background-color: #eb0565;
+          color: white;
+          cursor: pointer;
+          p {
+            font-weight: 600;
+          }
+        }
       }
     }
   }

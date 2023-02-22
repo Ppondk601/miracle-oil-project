@@ -132,6 +132,11 @@ export default {
       size: "",
     };
   },
+  middleware(context){
+    if(context.store.state.user.id == ''){
+      context.redirect("/admin/login");
+    }
+  },
   async fetch() {
     try {
       this.$store.dispatch("fetch");
@@ -181,6 +186,7 @@ export default {
   height: max-content;
   justify-content: center;
   align-items: center;
+  background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
   .modal {
     .box-submit {
       display: flex;
