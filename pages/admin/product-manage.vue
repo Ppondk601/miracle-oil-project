@@ -6,10 +6,10 @@
     <div class="main-content">
       <div class="header">
         <div class="title">
-          <h4>สินค้าภายในร้าน</h4>
+          <h2>สินค้าภายในร้าน</h2>
         </div>
         <div class="add function">
-          <button class="button--delete" @click="toggleModal" style="opacity:0">
+          <button class="button--delete" @click="toggleModal">
             <icon>add_circle</icon>
             เพิ่มสินค้า
           </button>
@@ -25,7 +25,7 @@
             <img :src="product.image.url" width="150px" />
           </div>
           <div class="create-time">
-            <p>สร้างเมื่อ : วันที่ {{  convertTimestamp(product.createAt) }}</p>
+            <p>สร้างเมื่อ : วันที่ {{ convertTimestamp(product.createAt) }}</p>
           </div>
           <div class="name">
             <h4>{{ product.name }}</h4>
@@ -37,8 +37,13 @@
         </div>
       </div>
     </div>
+    <!-- alert-box-add-data -->
     <!-- modal-form-add-data -->
     <modal ref="modal-add-product">
+      <alertbox ref="show-alertbox">
+        <icon>check_circle</icon>
+        <p>ส่งข้อมูลสำเร็จ</p>
+      </alertbox>
       <form @submit.prevent="confirmAdd">
         <div class="form add-data">
           <div class="header-form">
@@ -79,7 +84,6 @@
               @click.prevent="
                 $refs['modal-add-product'].$el.classList.remove('active')
               "
-              บัค
             >
               ยกเลิก
             </button>
@@ -161,12 +165,12 @@ export default {
       this.$refs["modal-add-product"].$el.classList.add("active");
     },
     convertTimestamp(timestamp) {
-      console.log(timestamp)
-      const date =  new Date(timestamp.seconds * 1000)
-      return date.toLocaleString('th-th', {
-      timeStyle: 'short',
-      dateStyle: 'medium',
-    }) 
+      console.log(timestamp);
+      const date = new Date(timestamp.seconds * 1000);
+      return date.toLocaleString("th-th", {
+        timeStyle: "short",
+        dateStyle: "medium",
+      });
     },
     toggleUpdateData(id) {
       // this.productId = id;
@@ -210,6 +214,11 @@ export default {
         this.$store.commit("pushProduct", uploadingData);
         e.target.reset();
         this.previewUrl = "";
+        this.$refs["show-alertbox"].$el.classList.add("active");
+
+        setTimeout(() => {
+          this.$refs["show-alertbox"].$el.classList.remove("active");
+        }, 3000);
       } catch (error) {
         alert("error");
       }
@@ -242,7 +251,10 @@ export default {
   height: 100vh;
   align-items: center;
   overflow-y: hidden;
-  background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  // background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  // background-color: #DDE0ED;
+  background: rgb(221,224,237);
+background: linear-gradient(176deg, rgba(221,224,237,1) 0%, rgba(221,224,237,1) 44%, rgba(246,246,250,1) 100%);
   .modal {
     form {
       display: flex;
@@ -255,17 +267,16 @@ export default {
         .header-form {
           padding: 1rem;
           border-radius: 10px;
-          background-color: #ab57f9d1;
           h2 {
-            color: white;
+            color: rgb(0, 0, 0);
           }
         }
         .box-input {
           .item-input {
             .input-title {
-              background-color: #64aef9;
+              background-color: #d1d1d1;
               p {
-                color: white;
+                color: rgb(0, 0, 0);
               }
             }
           }
@@ -341,63 +352,78 @@ export default {
   .main-content {
     display: flex;
     flex-direction: column;
-    width: 72vw;
-    height: 95vh;
+    width: 85vw;
+    height: 100vh;
     align-items: center;
-    margin-left: 2rem;
-    background: rgba(255, 255, 255, 0.825);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background: rgba(255, 255, 255, 0.2);
+    // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    border-radius: 10px;
     .header {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      border-radius: 10px 10px 0px 0px;
-      background-color: #ab57f9d1;
-      padding: 1rem;
+      background: rgba(255, 255, 255, 0.825);
+      padding:1rem 3rem;
       margin-bottom: 2rem;
       .title {
-        margin-left: 5rem;
-        background-color: #fad03af1;
-        width: 10rem;
-        height: 3rem;
+        width:max-content;
         align-items: center;
         display: flex;
         justify-content: center;
-        box-shadow: 3px 3px 5px rgb(68, 68, 68);
-        border-radius: 5px;
-        h4 {
-          color: white;
-          text-shadow: 1px 1px 2px black;
+        h2 {
+          color: rgb(30, 30, 30);
         }
       }
       .add {
         margin-right: 5rem;
         button {
           display: flex;
-          padding: 0.5rem 2rem;
-          gap: 0.5rem;
+          padding: 0.5rem 1.2rem;
+          gap: 0.2rem;
+          background-color: rgb(240, 240, 240);
+          box-shadow: 0px 1px 5px rgb(194, 194, 194);
+          color:rgb(58, 58, 58);
+          &:hover{
+            background-color:rgb(58, 58, 58);
+            color:rgb(240, 240, 240);
+          }
         }
       }
     }
     .card-box {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1rem;
       width: 90%;
       align-items: center;
       overflow-y: scroll;
       overflow-x: hidden;
       padding: 0.5rem;
+      *{
+        transition:all .25s ease;
+      }
+      &:hover{
+        .card{
+          opacity:.5;
+          filter:saturate(0.5);
+          &:hover{
+            opacity:1;
+            box-shadow:0px 10px 10px rgba(black,.25);
+            scale:1.05 ;
+            z-index:6;
+            filter:saturate(1);
+          }
+        }
+      }
       .card {
         display: flex;
         flex-direction: column;
-        width: 320px;
-        height: 400px;
+        background-color: #fff;
+        // width: 320px;
+        height: 350px;
         align-items: center;
         justify-content: space-between;
         border-radius: 10px;
@@ -436,11 +462,13 @@ export default {
           border-radius: 0px 0px 10px 10px;
           align-items: center;
           height: 50px;
-          background-color: #eb0565;
+          border-top:1px solid grey;
+          background-color: F6F6FA;
           color: white;
           cursor: pointer;
           p {
-            font-weight: 600;
+            color:rgb(60, 60, 60);
+            font-weight: 500;
           }
         }
       }

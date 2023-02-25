@@ -30,6 +30,7 @@
         <div class="inbox-title">
           <div class="tool">
             <div class="amount">
+              <span><icon>inbox</icon></span>
               <h4>ข้อความทั้งหมด:</h4>
               <p>{{ this.$store.getters.sizeOfComment }}</p>
             </div>
@@ -46,14 +47,26 @@
             class="user-comment"
             v-for="message in this.$store.state.comments"
             :key="message.id"
+            @click="clickForToggleId(message.id)"
+              :class="{ chosen: message.id === uid }"
           >
             <input type="checkbox" @click="checkboxSelected(message.id)" />
             <div
               class="all-message"
-              @click="clickForToggleId(message.id)"
-              :class="{ chosen: message.id === uid }"
+              
             >
-              <p>{{ message.userInterest }}</p>
+              <div class="message name">
+                <p>{{ message.userName }}</p>
+              </div>
+              <div class="message interest">
+                <p>{{ message.userInterest }}</p>
+              </div>
+              <div class="message comment">
+                <p>{{ message.userComment }}</p>
+              </div>
+              <div class="message timestamp">
+                <p>วันที่:{{ setTimestamp(message.currentTime) }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -132,8 +145,8 @@ export default {
       size: "",
     };
   },
-  middleware(context){
-    if(context.store.state.user.id == ''){
+  middleware(context) {
+    if (context.store.state.user.id == "") {
       context.redirect("/admin/login");
     }
   },
@@ -157,7 +170,12 @@ export default {
       }
       console.log(this.checkboxIds);
     },
-
+    setTimestamp(timestamp){
+      let date = new Date(timestamp.seconds*1000)
+      return date.toLocaleString("th-th", {
+        dateStyle: "short",
+      });
+    },
     async removeComment() {
       let ids = this.checkboxIds;
       let batch = writeBatch(db);
@@ -181,10 +199,8 @@ export default {
 <style lang="scss" scoped>
 .comment-container {
   display: flex;
-  flex-direction: row;
-  width: max-content;
-  height: max-content;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   align-items: center;
   background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
   .modal {
@@ -216,42 +232,53 @@ export default {
   .current-comment {
     display: flex;
     flex-direction: column;
-    width: max-content;
-    height: max-content;
+    width: 100vw;
+    height: 100vh;
     justify-content: center;
     .header {
+      display:flex;
+      width:82vw;
+      align-items: center;
+      justify-content: center;
       height: 10vh;
-      margin-left: 2rem;
+      background-color: #fff;
     }
     .wrapper-comment {
       display: flex;
-      flex-direction: row;
-      width: 80vw;
-      height: max-content;
-      position: relative;
+      flex-wrap: wrap;
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      overflow-y: scroll;
+      overflow-x:hidden;
       .inbox-title {
-        height: 80vh;
-        width: 25rem;
-        margin-left: 2rem;
-        border-radius: 10px;
-        background-color: #6787b8;
+        height: 90vh;
+        width: 82vw;
+        background: rgb(221, 224, 237);
+        background: linear-gradient(
+          176deg,
+          rgba(221, 224, 237, 1) 0%,
+          rgba(221, 224, 237, 1) 44%,
+          rgba(246, 246, 250, 1) 100%
+        );
         display: flex;
         flex-direction: column;
         align-items: center;
         .tool {
+          padding:1rem 2rem;
           width: 100%;
-          height: 4rem;
           display: flex;
-          justify-content: center;
-          flex-direction: row;
-          gap: 4rem;
+          justify-content: space-between;
           align-items: center;
-          border-radius: 5px 5px 0px 0px;
           background-color: lighten($secondary-color, 5%);
           .amount {
             display: flex;
             justify-content: center;
             align-items: center;
+            gap:.5rem;
+            span{
+              color:$primary-color;
+            }
             h4 {
               color: $primary-color;
             }
@@ -297,34 +324,59 @@ export default {
         }
         .user-comment {
           display: flex;
-          width: max-content;
-          margin-top: 1rem;
+          width: 100%;
+          background-color: #ffffffc5;
+          padding:0.5rem;
+          border-bottom:0.5px solid rgb(176, 176, 176);
           input {
             display: flex;
             margin-top: 0.5rem;
-            margin-right: 1rem;
+            margin-left:2rem;
             width: 20px;
             height: 20px;
           }
           .all-message {
             display: flex;
-            width: 20rem;
+            width: 100%;
             height: 2.5rem;
-            justify-content: center;
-            border-radius: 5px;
+            gap:2rem;
+            justify-content: space-evenly;
             align-items: center;
-            background-color: darken($primary-color, 65%);
             cursor: pointer;
-            p {
-              color: $primary-color;
-            }
-            &.chosen {
-              background-color: lighten(#85e249, 10%);
-              box-shadow: 5px 5px 5px $secondary-color;
-              p {
-                color: $secondary-color;
-                font-weight: 600;
+            .message{
+              &.name{
+                width:20%;
+                p{
+                  font-weight: 600;
+                  font-size: 1.2rem;
+                }
               }
+              &.interest{
+                width:20%;
+                p{
+                  font-weight: 500;
+                  color: rgb(54, 54, 54);
+                }
+              }
+              &.comment{
+                width:20%;
+                p{
+                  color:rgb(95, 95, 95);
+                }
+              }
+              &.timestamp{
+                width:20%;
+                p{
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+          &.chosen {
+            background-color: lighten(#a9a9a9,8%);
+            p {
+              color: $secondary-color;
+              font-weight: 600;
             }
           }
         }
@@ -335,9 +387,6 @@ export default {
         width: max-content;
         height: max-content;
         margin-left: 2.5rem;
-        gap: 1.5rem;
-        position: absolute;
-        right: 4.5rem;
         .author {
           display: flex;
           flex-direction: row;

@@ -4,6 +4,14 @@
     <div class="sidebar">
       <div class="section-role">
         <!--  -->
+        <div class="right-icon">
+          <div class="icon">
+            <span><icon>admin_panel_settings</icon></span>
+          </div>
+          <div class="image">
+            <img :src="$store.state.user.image" />
+          </div>
+        </div>
         <div class="role-name">
           <div class="admin-name">
             <p>{{ this.$store.state.user.displayName }}</p>
@@ -12,35 +20,57 @@
             <p>{{ this.$store.state.user.role }}</p>
           </div>
         </div>
-        <div class="right-icon">
-          <div class="icon">
-            <span><icon>admin_panel_settings</icon></span>
-          </div>
-          <div class="image">
-            <img :src="$store.state.user.image"/>
-          </div>
-        </div>
         <!--  -->
       </div>
       <div class="section-content">
         <div class="page comment">
           <div class="inbox">
-            <nuxt-link to="comment-manage">
+            <nuxt-link to="comment-manage" class="route page">
               <a>จัดการคอมเมนต์</a>
+              <div class="right-icon">
+                <span><icon>markunread_mailbox</icon></span>
+              </div>
             </nuxt-link>
-          </div>
-          <div class="right-icon">
-            <span><icon>markunread_mailbox</icon></span>
           </div>
         </div>
         <div class="page product">
           <div class="inbox">
-          <nuxt-link to="product-manage">
-            <a>จัดการสินค้าภายในเว็บไซต์</a>
-          </nuxt-link>
+            <nuxt-link to="product-manage" class="route page">
+              <a>จัดการสินค้าภายในเว็บไซต์</a>
+              <div class="right-icon">
+                <span><icon>store</icon></span>
+              </div>
+            </nuxt-link>
           </div>
-          <div class="right-icon">
-            <span><icon>store</icon></span>
+        </div>
+        <div class="page main">
+          <div class="inbox">
+            <div class="route disabled">
+              <a>จัดการข้อมูลหน้าหลัก</a>
+              <div class="right-icon">
+                <span><icon>grade</icon></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page map">
+          <div class="inbox">
+            <div class="route disabled">
+              <a>จัดการแผนที่ลูกค้า</a>
+              <div class="right-icon">
+                <span><icon>map</icon></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page about">
+          <div class="inbox">
+            <div class="route disabled">
+              <a>จัดการประวัติร้านค้า</a>
+              <div class="right-icon">
+                <span><icon>history_edu</icon></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -74,65 +104,64 @@ export default {
   height: max-content;
   width: max-content;
   flex-direction: row;
-  margin: 1rem;
-  height:100%;
+  height: 100%;
   .sidebar {
     display: flex;
-    flex-direction: column; //border 0 aspec-radio:unset margin-inline 0 padding-inline 0 width:0 
+    flex-direction: column; //border 0 aspec-radio:unset margin-inline 0 padding-inline 0 width:0
     width: 20rem;
-    height: 95vh;
+    min-width:18vw;
+    height: 100vh;
     justify-content: center;
-    align-items:center;
+    align-items: center;
     background: rgba(255, 255, 255, 0.825);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    gap: 2rem;
+    // border: 1px solid rgba(255, 255, 255, 0.18);
+    gap: 1rem;
     .section-role {
       display: flex;
-      flex-direction: row;
-      width: 80%;
+      flex-direction: column;
+      width: 100%;
       align-items: center;
-      height: 5rem;
+      height:40%;
       margin-top: 1rem;
-      background-color: #ab57f9;
-      border-radius: 10px;
+      gap:1rem;
       .right-icon {
         display: flex;
-        margin:1.5rem;
-        width: 10%;
-        position:relative;
-        .icon{
-          position:absolute;
-          bottom:0;
-          right:5px;
+        justify-content: center;
+        margin-top:1rem;
+        width: 100%;
+        position: relative;
+        .icon {
+          position: absolute;
+          bottom: 0;
+          left:180px;
           span {
-            color: darken($primary-color, 0%);
+            color: darken(#ffa200, 0%);
           }
         }
-        img{
-          width:50px;
-          height:50px;
+        img {
+          width: 120px;
+          height: 120px;
           border-radius: 999px;
-          border:3px solid white;
+          border: 3px solid #ffa200;
         }
       }
       .role-name {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-left:2rem;
+        align-items: center;
         .admin-name {
           p {
             font-weight: 600;
-            font-size:1.3rem;
-            color: lighten($primary-color, 10%);
+            font-size: 1.3rem;
+            color: lighten($secondary-color, 10%);
           }
         }
         .admin-role {
-          color: darken($primary-color, 5%);
+          color: lighten($secondary-color, 15%);
         }
       }
     }
@@ -145,26 +174,86 @@ export default {
       width: 100%;
       .page {
         display: flex;
-        width: 80%;
-        height: 3rem;
-        border-radius: 5px;
+        width: 100%;
+        height: 3.5rem;
         align-items: center;
-        background-color: darken($primary-color, 50%);
-        background-color:#46a2ff;
+        position:relative;
         .inbox {
+          display:flex;
           margin: 1rem;
-          width: 70%;
+          width: 100%;
+          height:100%;
+          margin:0;
+          .route {
+            padding:1rem;
+            width: 100%;
+            height: 100%;
+            display:flex;
+            justify-content: space-between;
+            a{
+              color:rgb(100, 100, 100);
+            }
+            .right-icon{
+              span{
+                color:rgb(100, 100, 100);
+              }
+            }
+            &.disabled{
+              align-items: center;
+              a{
+                color:rgb(190, 190, 190)
+              }
+              .right-icon{
+                span{
+                  color:rgb(190, 190, 190)
+                }
+              }
+              &:hover{
+                border:none;
+                background-color:rgb(245, 245, 245);
+                .right-icon{
+              span{
+                color:rgb(190, 190, 190);
+              }
+            }
+              }
+            }
+            &:hover{
+              border-left:5px solid #ffa200;
+            background-color:rgba(195, 195, 195, 0.5);
+            a{
+              color:black;
+            }
+            .right-icon{
+              span{
+                color:#ffa200;
+              }
+            }
+            }
+          }
+          .nuxt-link-exact-active{
+            border-left:5px solid #ffa200;
+            background-color:rgba(130, 130, 130, 0.25);
+            a{
+              color:black;
+            }
+            .right-icon{
+              span{
+                color:#ffa200;
+              }
+            }
+          }
+          .right-icon {
+            display: flex;
+            width: 20%;
+            span {
+              color: $secondary-color;
+            }
+          }
           a {
-            color: white;
+            color: $secondary-color;
             font-weight: 600;
             text-decoration: none;
-          }
-        }
-        .right-icon {
-          display: flex;
-          width: 20%;
-          span {
-            color: $primary-color;
           }
         }
       }
